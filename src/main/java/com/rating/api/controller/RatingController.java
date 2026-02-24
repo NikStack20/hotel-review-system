@@ -28,7 +28,7 @@ public class RatingController {
 	}
 
 	// getAll
-	@GetMapping("/")
+	@GetMapping
 	ResponseEntity<List<RatingDto>> getRating() {
 		return new ResponseEntity<List<RatingDto>>(this.ratingService.getRating(), HttpStatus.OK);
 	}

@@ -92,6 +92,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		   <!-- cloud-starter-config -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+    <scope>compile</scope>
+</dependency>
 	</dependencies>
 
 	<build>
