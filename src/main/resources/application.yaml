@@ -9,6 +9,12 @@ spring:
       url: mongodb://localhost:27017
       database: microservices
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://integrator-5202901.okta.com/oauth2/default
+
   config:
     import: optional:configserver:http://localhost:7054
 #eureka:
