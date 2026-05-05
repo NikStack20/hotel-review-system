@@ -26,12 +26,6 @@
 
     <dependencies>
 
-        <!-- Reactive Stack Required for Gateway -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-
         <!-- Spring Cloud Gateway -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -43,7 +37,18 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+        
+<!-- Brave tracing -->
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-tracing-bridge-brave</artifactId>
+</dependency>
 
+<!-- Zipkin -->
+<dependency>
+  <groupId>io.zipkin.reporter2</groupId>
+  <artifactId>zipkin-reporter-brave</artifactId>
+</dependency>
         <!-- Actuator (for debugging routes) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
