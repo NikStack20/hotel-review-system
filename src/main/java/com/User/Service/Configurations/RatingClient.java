@@ -1,4 +1,4 @@
-package com.User.Service.servicesImpl;
+package com.User.Service.Configurations;
 
 import java.util.List;
 

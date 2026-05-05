@@ -3,7 +3,11 @@ package com.User.Service.Configurations;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
+
+import com.User.Service.servicesImpl.UserResilienceService;
+
+import feign.micrometer.MicrometerObservationCapability;
+import io.micrometer.observation.ObservationRegistry;
 
 @Configuration
 public class UserConfig {
@@ -13,13 +17,13 @@ public class UserConfig {
 		return new ModelMapper();
 	}
 
-	@Bean("ratingWebClient")
-	WebClient ratingWebClient(WebClient.Builder builder) {
-		return builder.baseUrl("http://RATING-SERVICE").build();
+	@Bean
+	UserResilienceService userServiceResilience() {
+		return new UserResilienceService();
 	}
 
-	@Bean("hotelWebClient")
-	WebClient hotelWebClient(WebClient.Builder builder) {
-		return builder.baseUrl("http://HOTEL-SERVICE").build();
+	MicrometerObservationCapability micrometerObservationCapability(ObservationRegistry observationRegistry) {
+		return new MicrometerObservationCapability(observationRegistry);
 	}
+
 }
