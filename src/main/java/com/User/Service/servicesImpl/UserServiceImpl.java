@@ -1,16 +1,10 @@
 package com.User.Service.servicesImpl;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +12,8 @@ import com.User.Service.GlobalExceptionHandler.ConflictHandler;
 import com.User.Service.GlobalExceptionHandler.DBExceptions;
 import com.User.Service.UserRepos.UserRepository;
 import com.User.Service.entities.User;
-import com.User.Service.loadouts.HotelDto;
-import com.User.Service.loadouts.RatingDto;
 import com.User.Service.loadouts.UserDto;
 import com.User.Service.services.UserService;
-
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,15 +22,10 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepo;
 
 	@Autowired
-	private HotelServiceClient hotelServiceClient;
-
-	@Autowired
-	private RatingClient ratingClient; // Web-Client Bean Injection
-
-	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
-	@Autowired
 	private ModelMapper modelMapper;
+
+	@Autowired
+	private UserResilienceService userResilienceService;
 
 	@Override
 	public UserDto saveUser(UserDto userDto) {
@@ -77,64 +61,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// getUser
-	// Configuring resilence4j for this controller with fallbackMethod
-
-	// Initialising retry
-	int retryCount = 1;
 
 	@Override
-	@Retry(name = "ratingHotelService", fallbackMethod = "ratingHotelFallback")
-	@CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
 	public UserDto getUser(String userId) {
 
-		logger.info("Retry count: {}", retryCount);
-		retryCount++;
-
-		// Fetch user from DB
-		User user = userRepo.findById(userId)
-				.orElseThrow(() -> new DBExceptions("User with given userId: " + userId + " not found"));
-
-		// 1st SERVICE CALL to RATING SERVICE
-		List<RatingDto> ratings;
-		try {
-			ratings = ratingClient.getRatings(userId);
-		} catch (Exception e) {
-			logger.error("Error while calling Rating-Service", e);
-			ratings = Collections.emptyList();
-		}
-
-		if (ratings == null || ratings.isEmpty()) {
-			ratings = Collections.emptyList();
-		}
-
-		logger.info("Ratings fetched for user {} : {}", userId, ratings.size());
-
-		// 2nd SERVICE CALL to HOTEL SERVICE
-		Set<String> hotelIds = ratings.stream().map(RatingDto::getHotelId).filter(Objects::nonNull)
-				.collect(Collectors.toSet());
-
-		Map<String, HotelDto> hotelMap = hotelServiceClient.fetchHotelsForIds(hotelIds);
-
-		ratings.forEach(rating -> rating.setHotel(hotelMap.get(rating.getHotelId())));
-
-		UserDto userDto = modelMapper.map(user, UserDto.class);
-		userDto.setRatings(ratings);
-
-		return userDto;
-	}
-
-	public UserDto ratingHotelFallback(String userId, Throwable ex) {
-
-		logger.error("Fallback triggered in UserService: {}", ex.getMessage());
-
-		User user = User.builder().email("xyz123@gmail.com").name("John Doe")
-				.about("Some services are down, fallback response").userId("fallback-id").build();
-
-		UserDto userDto = modelMapper.map(user, UserDto.class);
-
-		userDto.setRatings(Collections.emptyList());
-
-		return userDto;
+		return userResilienceService.getUserWithResilience(userId);
 	}
 
 	@Override
