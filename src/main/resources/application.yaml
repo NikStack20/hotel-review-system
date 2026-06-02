@@ -5,22 +5,22 @@ spring:
   application:
     name: USER-SERVICE
   profiles:
-      active: dev
+    active: dev
   datasource:
     url: jdbc:mysql://localhost:3397/microservices
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
+
   config:
     import: optional:configserver:http://localhost:7054  # [optional] To get rid from application fallback.
-      
+
 
   jpa:
     hibernate:
       ddl-auto: update   # <- DB entries auto update
     show-sql: true       # <- SQL true 
- # profiles:
+  # profiles:
   #  active: prod
 management:
   health:
@@ -35,7 +35,7 @@ management:
   endpoint:
     health:
       show-details: always
-      
+
   tracing:
     sampling:
       probability: 1.0
@@ -60,15 +60,15 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 3
         slidingWindowSize: 10
         slidingWindowType: COUNT_BASED
-        
-        
+
+
   retry:
     instance:
       ratingHotelService:
         max-attempts: 3
         wait-duration: 5s
-        
-        
+
+
   ratelimiter:
     instances:
       userRateLimiter:

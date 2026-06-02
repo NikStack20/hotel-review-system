@@ -1,6 +1,7 @@
 User Service
 
-User Service is a microservice responsible for managing user information and aggregating related data from other services within the system.
+User Service is a microservice responsible for managing user information and aggregating related data from other
+services within the system.
 
 It retrieves user data and enriches it with ratings and hotel details by communicating with other microservices.
 
@@ -75,7 +76,8 @@ mvn spring-boot:run
 
 Load Testing
 
-Basic load testing was performed using Apache JMeter to observe service behavior under concurrent requests and when downstream services fail.
+Basic load testing was performed using Apache JMeter to observe service behavior under concurrent requests and when
+downstream services fail.
 
 ---
 

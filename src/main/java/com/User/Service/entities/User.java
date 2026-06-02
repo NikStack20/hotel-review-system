@@ -1,17 +1,15 @@
 package com.User.Service.entities;
-import java.util.ArrayList;       
-import java.util.List;
+
 import com.User.Service.loadouts.RatingDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
- 
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,20 +18,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "micro_users")
 public class User {
 
-	@Id
-	private String userId;
+    @Id
+    private String userId;
 
-	@Column(name = "Names", nullable = false)
-	private String name;
+    @Column(name = "Names", nullable = false)
+    private String name;
 
-	@Column(name = "EMAILS", nullable = false)
-	private String email;
+    @Column(name = "EMAILS", nullable = false)
+    private String email;
 
-	@Column(name = "ABOUT", nullable = false)
-	private String about;
+    @Column(name = "ABOUT", nullable = false)
+    private String about;
 
-	@Transient // Database X
-	private List<RatingDto> ratings = new ArrayList<>();
-	// other entities
+    @Transient // Database X
+    private List<RatingDto> ratings = new ArrayList<>();
+    // other entities
 
 }

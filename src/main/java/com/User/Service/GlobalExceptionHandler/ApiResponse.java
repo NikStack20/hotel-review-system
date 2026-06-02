@@ -1,8 +1,9 @@
 package com.User.Service.GlobalExceptionHandler;
-import org.springframework.http.HttpStatus;    
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,8 +11,8 @@ import lombok.NoArgsConstructor;
 
 public class ApiResponse {
 
-	private String message;
-	private boolean success;
-	private HttpStatus status;
+    private String message;
+    private boolean success;
+    private HttpStatus status;
 
 }
