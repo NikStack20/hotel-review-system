@@ -6,8 +6,9 @@ spring:
     name: RATING-SERVICE
   data:
     mongodb:
-      url: mongodb://localhost:27017
-      database: microservices
+      host: localhost
+      port: 27017
+      database: ratingService
 
   security:
     oauth2:
