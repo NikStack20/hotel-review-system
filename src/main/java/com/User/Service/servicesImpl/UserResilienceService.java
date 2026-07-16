@@ -29,7 +29,7 @@ public class UserResilienceService {
     private HotelServiceClient hotelServiceClient;
     @Autowired
     private RatingClient ratingClient; // OpenFeign Bean Injection
-    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     // Configuring resilence4j for this controller with fallbackMethod
 
@@ -68,7 +68,7 @@ public class UserResilienceService {
         return userDto;
     }
 
-    public UserDto ratingHotelFallback(String userId, Throwable ex) {
+    public UserDto ratingHotelFallback(Throwable ex) {
 
         logger.error("========== FALLBACK TRIGGERED ==========");
         logger.error("Exception Type : {}", ex.getClass().getName());

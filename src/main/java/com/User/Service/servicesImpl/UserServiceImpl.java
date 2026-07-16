@@ -10,9 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,18 +45,19 @@ public class UserServiceImpl implements UserService {
         User saved = this.userRepo.save(user);
         return this.modelMapper.map(saved, UserDto.class);
 
-//		OR User savedUser=this.userRepo.save(user);
+
 //		return savedUser;
     }
 
     @Override
     public List<UserDto> getAllUsers() {
 
-        List<User> allUser = this.userRepo.findAll();
-
-        List<UserDto> userDtos = allUser.stream().map(user -> this.modelMapper.map(user, UserDto.class))
-                .collect(Collectors.toList());
-        return userDtos;
+        List<User> users = this.userRepo.findAll();
+        List<UserDto> result = new ArrayList<>();
+        for(User user: users) {
+            result.add(userResilienceService.getUserWithResilience(user.getUserId()));
+        }
+        return result;
     }
 
     // getUser
@@ -91,9 +92,9 @@ public class UserServiceImpl implements UserService {
 
     /*
      * public boolean findByEmail(String email) { Optional<User> user =
-     * this.userRepo.findByEmail(email); return user.isPresent();
+
      *
-     * }
+     *
      */
 
 }
