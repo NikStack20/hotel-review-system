@@ -1,8 +1,6 @@
 package com.lcwd.gateway.ApiGateway.AuthController;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.lcwd.gateway.ApiGateway.models.AuthResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -10,10 +8,10 @@ import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2Aut
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.lcwd.gateway.ApiGateway.models.AuthResponse;
-
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class AuthController {
