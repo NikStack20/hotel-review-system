@@ -1,6 +1,5 @@
 package com.org.Hotel.Service.Serviceimpl;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -41,13 +40,6 @@ public class HotelServiceimpl implements HotelService {
 	}
 
 	@Override
-	public List<HotelDto> getAllHotels() {
-		   List<Hotel> hotels = this.hotelRepo.findAll();
-		   List<HotelDto> hotelDtos = hotels.stream().map((hotel) -> this.modelMapper.map(hotel, HotelDto.class)).collect(Collectors.toList());
-		return hotelDtos;
-	}
-
-	@Override
 	public HotelDto getHotel(String hotelId) {
 
 	    Hotel hotel = hotelRepo.findById(hotelId)
@@ -57,6 +49,16 @@ public class HotelServiceimpl implements HotelService {
 
 	}
 
+    @Override
+    public Map<String, HotelDto> getHotelsByHotelIds(Set<String> hotelIds) {
+        if(hotelIds == null || hotelIds.isEmpty()) {
+            return new HashMap<>();
+        }
+        List<Hotel> hotels = hotelRepo.findAllById(hotelIds);
+         return hotels.stream()
+                 .collect(Collectors.
+                         toMap(Hotel::getHotelId,hotel -> modelMapper.map(hotel, HotelDto.class)));
+    }
 
 
 }

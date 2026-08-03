@@ -1,5 +1,8 @@
 package com.org.Hotel.Service.Controller;
-import java.util.List;   
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +43,12 @@ public class HotelController {
 		ResponseEntity<HotelDto> getHotelByUserId(@PathVariable String userId) {
 			return new ResponseEntity<HotelDto> (this.hotelService.getHotel(userId), HttpStatus.OK);
 		}
-	
-	//get all
-	@GetMapping
-	ResponseEntity<List<HotelDto>> getAll() {
-		  return new ResponseEntity<List<HotelDto>> (this.hotelService.getAllHotels(), HttpStatus.OK);
-	}
+
+    //get hotels by userId
+    @GetMapping("/hotelsInBulk/{hotelIds}")
+    ResponseEntity<Map<String, HotelDto>> getHotelsByHotelIds(@PathVariable Set<String> hotelIds) {
+        return new ResponseEntity<Map<String, HotelDto>>(this.hotelService.getHotelsByHotelIds(hotelIds), HttpStatus.OK);
+    }
 
 
 }
