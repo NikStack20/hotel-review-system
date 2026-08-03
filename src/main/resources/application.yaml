@@ -4,24 +4,10 @@ server:
 spring:
   application:
     name: USER-SERVICE
-  profiles:
-    active: dev
-  datasource:
-    url: jdbc:mysql://localhost:3397/microservices
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
   config:
-    import: optional:configserver:http://localhost:7054  # [optional] To get rid from application fallback.
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:7054}
 
-
-  jpa:
-    hibernate:
-      ddl-auto: update   # <- DB entries auto update
-    show-sql: true       # <- SQL true 
-  # profiles:
-  #  active: prod
 management:
   health:
     circuitbreakers:
@@ -39,13 +25,10 @@ management:
   tracing:
     sampling:
       probability: 1.0
-  zipkin:
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+
 logging:
   pattern:
     level: "%5p [%X{traceId:-},%X{spanId:-}]"
-
 
 resilience4j:
   circuitbreaker:
@@ -54,25 +37,22 @@ resilience4j:
         registerHealthIndicator: true
         eventConsumerBufferSize: 10
         failureRateThreshold: 50
-        minimumNumberOfCalls: 5
+        minimumNumberOfCalls: 50
         automaticTransitionFromOpenToHalfOpenEnabled: true
-        waitDurationInOpenState: 6s
-        permittedNumberOfCallsInHalfOpenState: 3
-        slidingWindowSize: 10
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 10
+        slidingWindowSize: 100
         slidingWindowType: COUNT_BASED
 
-
   retry:
-    instance:
+    instances:
       ratingHotelService:
-        max-attempts: 3
-        wait-duration: 5s
-
+        max-attempts: 2
+        wait-duration: 200ms
 
   ratelimiter:
     instances:
       userRateLimiter:
-        limitForPeriod: 2
-        limitRefreshPeriod: 10s
-        timeoutDuration: 0
-    
+        limitForPeriod: 1000
+        limitRefreshPeriod: 1s
+        timeoutDuration: 100ms

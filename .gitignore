@@ -8,11 +8,9 @@ target/
 .env
 .env.*
 *.env
+!.env.example
 
 ### Local configuration files ###
-application-local.yml
-application-dev.yml
-application-prod.yml
 
 ### STS ###
 .apt_generated
