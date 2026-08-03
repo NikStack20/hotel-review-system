@@ -1,0 +1,14 @@
+server:
+  port: 7054
+
+spring:
+  application:
+    name: CONFIG-SERVER
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_REPO_URI}
+          clone-on-start: true
+          default-label: ${CONFIG_REPO_BRANCH:main}
