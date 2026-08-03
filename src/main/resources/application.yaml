@@ -3,47 +3,16 @@ server:
 
 spring:
   application:
-    name: Api-Gateway
-  profiles:
-    active: dev
+    name: API-GATEWAY
 
-  cloud:
-    gateway:
-      routes:
-        - id: HOTEL-SERVICE
-          uri: lb://HOTEL-SERVICE
-          predicates:
-            - Path=/hotels/**,/cookingStaff/**,/cleaningStaff/**
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:7054}
 
-        - id: RATING-SERVICE
-          uri: lb://RATING-SERVICE
-          predicates:
-            - Path=/ratings/**
-
-        - id: USER-SERVICE
-          uri: lb://USER-SERVICE
-          predicates:
-            - Path=/users/**
-
-  security:
-    oauth2:
-      client:
-        registration:
-          okta:
-            client-id: ${OKTA_CLIENT_ID}
-            client-secret: ${OKTA_CLIENT_SECRET}
-            scope: openid, profile, email, groups, offline_access
-        provider:
-          okta:
-            issuer-uri: ${OKTA_ISSUER}
-           
 management:
   tracing:
     sampling:
       probability: 1.0
-  zipkin:
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+
 logging:
   pattern:
     level: "%5p [%X{traceId:-},%X{spanId:-}]"
@@ -55,4 +24,4 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
