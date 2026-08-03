@@ -8,6 +8,7 @@ target/
 .env
 .env.*
 *.env
+!.env.example
 
 ### Local configuration files ###
 application-local.yml
