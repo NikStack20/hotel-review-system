@@ -1,0 +1,9 @@
+Sequential aggregation implementation.
+
+Observed:
+
+• 124 spans
+• 1.86 sec response
+• Gateway → User → Rating → Hotel
+
+Used to analyse scalability.
