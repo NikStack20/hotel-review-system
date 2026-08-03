@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RatingDto {
 
+    private String userId;
     private String ratingId;
     private String hotelId;
     private int rating;

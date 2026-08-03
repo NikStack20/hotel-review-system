@@ -11,5 +11,4 @@ import java.util.List;
 public interface RatingClient {
     @GetMapping("/ratings/getAllByUserId/{userId}")
     List<RatingDto> getRatings(@PathVariable String userId);
-
 }

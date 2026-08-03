@@ -1,5 +1,4 @@
 package com.User.Service.servicesImpl;
-
 import com.User.Service.Configurations.HotelServiceClient;
 import com.User.Service.Configurations.RatingClient;
 import com.User.Service.GlobalExceptionHandler.DBExceptions;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 
 public class UserResilienceService {
 
-    int retryCount = 1;
     @Autowired
     private UserRepository userRepo;
     @Autowired
@@ -31,14 +29,11 @@ public class UserResilienceService {
     private RatingClient ratingClient; // OpenFeign Bean Injection
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    // Configuring resilence4j for this controller with fallbackMethod
+    // Configuring resilience4j for this controller with fallbackMethod
 
     @Retry(name = "ratingHotelService", fallbackMethod = "ratingHotelFallback")
     @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
     public UserDto getUserWithResilience(String userId) {
-
-        logger.info("Retry count: {}", retryCount);
-        retryCount++;
 
         // Fetch user from DB
         User user = userRepo.findById(userId)
@@ -51,9 +46,6 @@ public class UserResilienceService {
         if (ratings == null || ratings.isEmpty()) {
             ratings = Collections.emptyList();
         }
-
-        logger.info("Ratings fetched for user {} : {}", userId, ratings.size());
-
         // 2nd SERVICE CALL to HOTEL SERVICE
         Set<String> hotelIds = ratings.stream().map(RatingDto::getHotelId).filter(Objects::nonNull)
                 .collect(Collectors.toSet());

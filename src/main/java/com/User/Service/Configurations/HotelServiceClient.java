@@ -29,15 +29,7 @@ public class HotelServiceClient {
         if (hotelIds == null || hotelIds.isEmpty()) {
             return Collections.emptyMap();
         }
-
-        Map<String, HotelDto> hotelMap = new HashMap<>();
-
-        for (String hotelId : hotelIds) {
-            HotelDto hotel = hotelClient.getHotel(hotelId);
-            hotelMap.put(hotelId, hotel);
-        }
-
-        return hotelMap;
+        return hotelClient.getHotels(hotelIds);
     }
 
     public Map<String, HotelDto> userHotelFallback(Set<String> hotelIds, Throwable ex) {

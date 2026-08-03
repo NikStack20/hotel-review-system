@@ -44,9 +44,6 @@ public class UserServiceImpl implements UserService {
         user.setAbout(user.getAbout());
         User saved = this.userRepo.save(user);
         return this.modelMapper.map(saved, UserDto.class);
-
-
-//		return savedUser;
     }
 
     @Override
@@ -58,6 +55,7 @@ public class UserServiceImpl implements UserService {
             result.add(userResilienceService.getUserWithResilience(user.getUserId()));
         }
         return result;
+
     }
 
     // getUser
