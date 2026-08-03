@@ -3,13 +3,13 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+**/bin/
 
 ### Environment / Secrets ###
 .env
 .env.*
 *.env
 !.env.example
-
 ### Local configuration files ###
 
 ### STS ###
