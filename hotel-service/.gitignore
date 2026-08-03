@@ -8,8 +8,10 @@ target/
 .env
 .env.*
 *.env
-
 !.env.example
+.env.local
+.env.prod
+.env.dev
 
 
 ### STS ###

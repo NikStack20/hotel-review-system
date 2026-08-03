@@ -9,11 +9,11 @@ target/
 .env.*
 *.env
 !.env.example
+.env
 
-### Local configuration files ###
-application-local.yml
-application-dev.yml
-application-prod.yml
+.env.local
+.env.prod
+.env.dev
 
 
 ### STS ###
