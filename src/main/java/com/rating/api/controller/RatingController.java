@@ -29,8 +29,8 @@ public class RatingController {
 
 	// getAll
 	@GetMapping
-	ResponseEntity<List<RatingDto>> getRating() {
-		return new ResponseEntity<List<RatingDto>>(this.ratingService.getRating(), HttpStatus.OK);
+	ResponseEntity<List<RatingDto>> getAll() {
+		return new ResponseEntity<List<RatingDto>>(this.ratingService.getAllRatings(), HttpStatus.OK);
 	}
 
 	// getAllByHotelId

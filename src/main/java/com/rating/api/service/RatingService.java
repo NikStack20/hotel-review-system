@@ -10,12 +10,13 @@ public interface RatingService {
 	RatingDto create(RatingDto ratingDto);
 
 	// get all ratings
-	List<RatingDto> getRating();
+	List<RatingDto> getAllRatings();
 
 	// get all by UserId
 	List<RatingDto> getRatingByUserId(String userId);
 
 	// get all by hotel
 	List<RatingDto> getRatingByHotelId(String hotelId);
+
 
 }

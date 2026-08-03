@@ -27,13 +27,13 @@ public class RatingServiceImpl implements RatingService {
 	}
 
 	@Override
-	public List<RatingDto> getRating() {
-		List<Rating> saved = this.ratingRepo.findAll();
-		List<RatingDto> dto = saved.stream().map((rating) -> this.modelMapper.map(rating, RatingDto.class))
-				.collect(Collectors.toList());
-		return dto;
+	public List<RatingDto> getAllRatings() {
+        List<Rating> saved = this.ratingRepo.findAll();
+        List<RatingDto> dto = saved.stream().map((rating) -> this.modelMapper.map(rating, RatingDto.class))
+                .collect(Collectors.toList());
+        return dto;
 
-	}
+    }
 
 	@Override
 	public List<RatingDto> getRatingByUserId(String userId) {
