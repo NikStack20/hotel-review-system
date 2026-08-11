@@ -1,27 +1,6 @@
-server:
-  port: 7053
-
 spring:
   application:
     name: API-GATEWAY
 
   config:
     import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:7054}
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-
-logging:
-  pattern:
-    level: "%5p [%X{traceId:-},%X{spanId:-}]"
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
