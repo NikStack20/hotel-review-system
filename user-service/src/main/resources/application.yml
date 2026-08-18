@@ -1,58 +1,6 @@
-server:
-  port: 7052
-
 spring:
   application:
     name: USER-SERVICE
 
   config:
     import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:7054}
-
-management:
-  health:
-    circuitbreakers:
-      enabled: true
-
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-  endpoint:
-    health:
-      show-details: always
-
-  tracing:
-    sampling:
-      probability: 1.0
-
-logging:
-  pattern:
-    level: "%5p [%X{traceId:-},%X{spanId:-}]"
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      ratingHotelBreaker:
-        registerHealthIndicator: true
-        eventConsumerBufferSize: 10
-        failureRateThreshold: 50
-        minimumNumberOfCalls: 50
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 10
-        slidingWindowSize: 100
-        slidingWindowType: COUNT_BASED
-
-  retry:
-    instances:
-      ratingHotelService:
-        max-attempts: 2
-        wait-duration: 200ms
-
-  ratelimiter:
-    instances:
-      userRateLimiter:
-        limitForPeriod: 1000
-        limitRefreshPeriod: 1s
-        timeoutDuration: 100ms
