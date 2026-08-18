@@ -1,18 +1,6 @@
-server:
-  port: 7050
-
 spring:
   application:
     name: HOTEL-SERVICE
 
   config:
     import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:7054}
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-
-logging:
-  pattern:
-    level: "%5p [%X{traceId:-},%X{spanId:-}]"
