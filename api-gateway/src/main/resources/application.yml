@@ -1,6 +1,6 @@
 spring:
   application:
-    name: API-GATEWAY
+    name: api-gateway
 
   config:
-    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:7054}
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:7054}
