@@ -1,3 +1,5 @@
 .idea/
 .env
 !.env.compose.example"# Ignored files" 
+"docker-compose.yml" 
+".env.compose.example" 
