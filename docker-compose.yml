@@ -24,7 +24,7 @@ services:
       - hrs-network
 
   postgres:
-    image: postgres:16
+    image: postgres:18
     container_name: hrs-postgres
     restart: unless-stopped
     environment:
@@ -130,8 +130,6 @@ services:
       EUREKA_SERVER_URL: http://service-registry:8761/eureka/
       ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
       OKTA_ISSUER_URI: ${OKTA_ISSUER_URI}
-    ports:
-      - "7052:7052"
     depends_on:
       mysql:
         condition: service_healthy
@@ -153,8 +151,6 @@ services:
       EUREKA_SERVER_URL: http://service-registry:8761/eureka/
       ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
       OKTA_ISSUER_URI: ${OKTA_ISSUER_URI}
-    ports:
-      - "7050:7050"
     depends_on:
       postgres:
         condition: service_healthy
@@ -174,8 +170,6 @@ services:
       EUREKA_SERVER_URL: http://service-registry:8761/eureka/
       ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
       OKTA_ISSUER_URI: ${OKTA_ISSUER_URI}
-    ports:
-      - "7051:7051"
     depends_on:
       mongodb:
         condition: service_healthy
