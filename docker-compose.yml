@@ -123,6 +123,7 @@ services:
     container_name: hrs-user-service
     restart: unless-stopped
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       USER_DB_URL: jdbc:mysql://mysql:3306/${USER_DB_NAME:-userservice}
       USER_DB_USERNAME: ${USER_DB_USERNAME}
       USER_DB_PASSWORD: ${USER_DB_PASSWORD}
@@ -144,6 +145,7 @@ services:
     container_name: hrs-hotel-service
     restart: unless-stopped
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       HOTEL_DB_URL: jdbc:postgresql://postgres:5432/${HOTEL_DB_NAME:-hotelDB}
       HOTEL_DB_USERNAME: ${HOTEL_DB_USERNAME}
       HOTEL_DB_PASSWORD: ${HOTEL_DB_PASSWORD}
@@ -165,6 +167,7 @@ services:
     container_name: hrs-rating-service
     restart: unless-stopped
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       RATING_DB_URI: mongodb://mongodb:27017/${RATING_DB_NAME:-ratingService}
       CONFIG_SERVER_URL: http://config-server:7054
       EUREKA_SERVER_URL: http://service-registry:8761/eureka/
@@ -187,6 +190,7 @@ services:
     container_name: hrs-api-gateway
     restart: unless-stopped
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       CONFIG_SERVER_URL: http://config-server:7054
       EUREKA_SERVER_URL: http://service-registry:8761/eureka/
       ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
