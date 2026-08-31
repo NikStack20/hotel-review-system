@@ -414,15 +414,15 @@ A consolidated view of what this architecture costs and returns, independent of 
 
 - Meaningfully higher baseline operational surface area: six components must each be built, deployed, monitored, and kept healthy, versus one for an equivalent monolith.
 - Cross-service data consistency is eventual by construction, which pushes real design work (compensating actions, idempotency, saga patterns) onto every workflow that spans service boundaries.
-- Local development and onboarding is slower — a new engineer must run or mock six components to exercise a full end-to-end flow.
+- Local development and onboarding remain more complex than a monolith, although Docker Compose now reduces the setup burden by providing a reproducible multi-service environment.
 
 **Operational Complexity**
 
-Running this system in production requires health checks, log aggregation, and metrics per service; a Eureka cluster (not a single instance) for discovery availability; and a Config Server that is itself resilient enough not to become a startup-blocking single point of failure. None of this operational surface exists in a monolith.
+Running this system in production would require health checks, log aggregation, and metrics per service; a highly available Eureka strategy (or a platform-native discovery mechanism); and a Config Server deployment resilient enough not to become a startup-blocking single point of failure. None of this operational surface exists in a monolith.
 
 **Deployment Complexity**
 
-Six independently versioned deployable artifacts means a coordinated release process (or, ideally, contract-safe independent releases) is required, along with a deployment order consideration (Config Server and Eureka generally need to be available before dependent services start cleanly).
+Six independently versioned deployable artifacts mean a coordinated release process (or, ideally, contract-safe independent releases) is required. In the Docker Compose environment, dependency health checks and startup conditions help enforce the required infrastructure ordering, while production deployment still requires a dedicated orchestration/release strategy.
 
 **Learning Value**
 
@@ -430,14 +430,48 @@ This architecture deliberately surfaces the core problems that distinguish backe
 
 ---
 
+## Deployment Architecture — Current State
+
+The system is now containerized for local/integration deployment using **Docker and Docker Compose**. The Compose topology runs the six application components together with their supporting databases and Zipkin on a shared Docker network.
+
+The current topology is:
+
+```text
+Client
+  ↓
+API Gateway
+  ↓
+User Service
+  ├──→ Rating Service → MongoDB
+  └──→ Hotel Service  → PostgreSQL
+
+User Service → MySQL
+
+Infrastructure:
+Config Server
+Eureka / Service Registry
+Zipkin
+
+Container orchestration:
+Docker Compose
+Network:
+hrs-network
+```
+
+Within the Compose network, services communicate using Docker service DNS names rather than `localhost`. For example, User Service reaches MySQL through `mysql:3306`, Hotel Service reaches PostgreSQL through `postgres:5432`, and Rating Service reaches MongoDB through `mongodb:27017`.
+
+Compose also defines health checks for the core infrastructure/database dependencies and startup dependencies for services that require them. This reduces startup-order failures, although container startup/health status is not by itself proof of complete end-to-end application correctness; the full request path still requires functional verification.
+
+The Docker Compose configuration is intended primarily to provide a reproducible local/integration environment. Production orchestration, high availability, persistent observability storage, and CI/CD remain future concerns.
+
+---
+
 ## Future Architecture Evolution
 
-The current system runs services as directly deployed Spring Boot processes. The following evolutions are identified as the logical next steps, in rough order of leverage:
+With Docker and Docker Compose now established, the following evolutions are the logical next steps, in rough order of leverage:
 
-- **Docker** — package each service as a container image to eliminate "works on my machine" environment drift and to standardize the deployment unit across all six components.
-- **Docker Compose** — provide a single command to stand up the full local topology (Config Server, Eureka, Gateway, and all three services with their respective databases), directly addressing the local-development-friction tradeoff noted above.
-- **CI/CD** — automate build, test, and deployment per service so that independent deployability (a core stated benefit of the microservices decision) is actually realized in practice rather than only being theoretically possible.
-- **Kubernetes** — move from manually managed instances to a platform that handles scheduling, self-healing (automatic restart of failed containers), and horizontal scaling declaratively; this would also prompt re-evaluating whether Eureka is still needed or whether Kubernetes-native service discovery (via Services/DNS) should replace it.
+- **CI/CD** — automate build, test, image creation, and deployment per service so that independent deployability is realized consistently rather than only being theoretically possible.
+- **Kubernetes** — move from Docker Compose/local orchestration to a production orchestration platform that handles scheduling, self-healing, and horizontal scaling declaratively; this would also prompt re-evaluating whether Eureka is still needed or whether Kubernetes-native service discovery (via Services/DNS) should replace it.
 - **Centralized Logging** — aggregate logs from all services into a single searchable store (e.g., an ELK/EFK-style stack), which is the natural complement to distributed tracing: traces show *where* a request went, centralized logs show *what happened* at each stop, correlated by trace ID.
 - **Prometheus** — collect time-series metrics per service (request rate, error rate, latency percentiles, circuit breaker state) to enable proactive alerting instead of reactive log/trace investigation after a user reports an issue.
 - **Grafana** — visualize Prometheus metrics as dashboards, giving the team a real-time operational view of the system rather than only point-in-time trace/log lookups.
