@@ -1,3 +1,5 @@
 .idea/
 .env
 !.env.compose.example
+.DS_Store
+Thumbs.db
