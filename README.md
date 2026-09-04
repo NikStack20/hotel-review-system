@@ -59,3 +59,5 @@ come to those who ⭐ **star this repo** while they wait.
   <b>🛎️ Thank you for your stay at Hotel Review System. 🛎️</b><br>
   <i>We'll be with you shortly.</i>
 </p>
+
+Deployment preparation verified locally.
