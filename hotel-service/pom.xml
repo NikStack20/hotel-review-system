@@ -143,11 +143,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>>spring-boot-maven-plugin</artifactId>
-				<version>3.3.4</version>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
